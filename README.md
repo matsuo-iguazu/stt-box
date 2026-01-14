@@ -46,6 +46,9 @@ sequenceDiagram
 2. **IBM Cloud CodeEngine**: プロジェクトが作成済みであること。
 3. **IBM Cloud Container Registry**: 名前空間（Namespace）が作成済みであること。
 4. **Box アカウント**: 開発者コンソールおよび管理コンソールへのアクセス権限があること。
+5. **ローカル環境**:
+   * **Docker**: イメージのビルドに必要です。インストールは[Docker Desktop](https://www.docker.com/products/docker-desktop/)などを参照してください。
+   * **IBM Cloud CLI**: インストールは[公式ガイド](https://cloud.ibm.com/docs/cli?topic=cli-install-ibmcloud-cli)を参照してください。
 
 ## 4. 詳細構築手順
 
@@ -92,12 +95,30 @@ sequenceDiagram
 
 ### STEP 5: コンテナイメージのビルドとプッシュ
 
-1. `Dockerfile` を使用してイメージをビルドします。
-```bash
-ibmcloud cr login
-docker build -t icr.io/[名前空間]/stt-box-wxo:latest .
-docker push icr.io/[名前空間]/stt-box-wxo:latest
-```
+1. **CLIへのログイン**:
+   * IBM Cloud コンソール右上のアバターをクリックし、「CLI と API にログイン」を選択する。
+   * 表示されたログインコマンドをコピーし、ターミナルで実行する。
+   * リージョンの選択にて、IBM Cloud Container Registryが稼働するリージョンを選択する。
+2. **プラグインの確認**:
+   Container Registry 操作用のプラグインが未導入の場合は、下記コマンドでインストールしてください。
+   ```bash
+   ibmcloud plugin install container-registry
+   ```
+3. **名前空間の確認（または作成）**
+   ```bash
+   # 既存の名前空間の確認
+   ibmcloud cr namespaces
+   # 名前空間の作成（未作成の場合のみ）
+   ibmcloud cr namespace-add <名前空間名>
+   ```
+4. `Dockerfile` を使用してイメージをビルドします。
+   * Container Registryのドメインと名前空間を使用して`docker`コマンドを実行する。
+   * CRドメイン: jp-tokの場合 `jp.icr.io`、en-southの場合 `icr.io` を使用する。
+   ```bash
+   ibmcloud cr login
+   docker build -t [CRドメイン]/[名前空間名]/stt-box-wxo:latest .
+   docker push [CRドメイン]/[名前空間名]/stt-box-wxo:latest
+   ```
 
 ### STEP 6: CodeEngine への展開
 
