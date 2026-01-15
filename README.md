@@ -185,11 +185,16 @@ sequenceDiagram
 　
 ### STEP 8: Webhook V2 の紐付け
 
-1. Box 開発者コンソール > Webhook > Webhookの作成。
-* **対象**: `speech` フォルダを選択。
-* **イベント**: `FILE.UPLOADED`
-* **ターゲット URL**: STEP 6 で取得した Receiver App の URL。
-
+1. **Box 開発者コンソール**: - Platformアプリ画面で対象のアプリを選択
+* **Webhook**: Webhookの作成 > V2
+* **構成**: STEP7で控えたアプリのURLを貼りつけ
+* **コンテンツタイプ-**: 以下を選択
+    * フォルダ（例: `box-stt-root`）を選択
+    * File Trigger - `File Uploaded` を選択  
+* 「Webhookを作成」
+* **承認**:「確認して承認」
+2. **アプリの承認**:
+   * Box 管理コンソール > 統合 > Platformアプリマネージャ > サーバー認証アプリの「・・・」から「アプリの（再）承認」を選び本アプリを承認します。
 
 ## 5. (オプション) ローカルでの開発・デバッグ
 ローカル環境でスクリプトを直接実行してテストを行う場合は、以下の手順で環境を構築してください。
